@@ -3,5 +3,5 @@ module.exports = {
   workers: 0,
 
   // imgUrl
-  imgUrl: 'http://cdn.kecoyo.com/',
+  imgUrl: 'https://cdn.kecoyo.com/',
 };
