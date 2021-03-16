@@ -1,0 +1,10 @@
+.idea
+.vscode
+logs/
+node_modules/
+runtime/
+www/upload
+www/apidoc
+.env
+package-lock.json
+

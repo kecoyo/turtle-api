@@ -1,0 +1,19 @@
+{
+  "apps": [{
+    "name": "turtle-api",
+    "script": "production.js",
+    "cwd": "",
+    "max_memory_restart": "1G",
+    "autorestart": true,
+    "watch": ["src", "view", "www"],
+    "ignore_watch": ["node_modules", "www/upload"],
+    "watch_options": {
+      "followSymlinks": false
+    },
+    "node_args": [],
+    "args": [],
+    "env": {
+
+    }
+  }]
+}

@@ -1,0 +1,7 @@
+{
+  "extends": "think",
+  "rules": {
+    "prefer-const": 0,
+    "comma-dangle": 0
+  }
+}
