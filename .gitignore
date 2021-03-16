@@ -8,3 +8,7 @@ www/apidoc
 .env
 package-lock.json
 
+# baota
+.htaccess
+404.html
+
