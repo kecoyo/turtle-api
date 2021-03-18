@@ -28,8 +28,8 @@ module.exports = class extends think.Controller {
       }
     }
 
-    think.logger.warn('请求失败！');
-    think.logger.warn(JSON.stringify(headers));
-    return this.fail('请求失败！', headers);
+    // think.logger.warn('请求失败！');
+    // think.logger.warn(JSON.stringify(headers));
+    // return this.fail('请求失败！', headers);
   }
 };
