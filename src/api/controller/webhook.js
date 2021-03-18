@@ -29,8 +29,10 @@ module.exports = class extends think.Controller {
     try {
       var cmd = 'git pull';
       const result = await think.exec(cmd);
+      think.logger.info('exec command: ' + cmd + '\n\n' + result);
       return this.success(result);
     } catch (e) {
+      think.logger.error(e);
       return this.fail(e.message);
     }
   }
