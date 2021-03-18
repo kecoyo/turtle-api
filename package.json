@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node development.js",
     "test": "THINK_UNIT_TEST=1 nyc ava test/ && nyc report --reporter=html",
-    "apidoc": "apidoc -i src/ -o www/apidoc/",
+    "doc": "apidoc -i src/ -o www/doc/",
     "lint": "eslint src/",
     "lint-fix": "eslint --fix src/"
   },
