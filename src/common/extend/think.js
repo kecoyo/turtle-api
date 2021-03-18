@@ -1,5 +1,7 @@
+/* eslint-disable camelcase */
 const path = require('path');
 const fs = require('fs');
+const child_process = require('child_process');
 const md5 = require('md5');
 const isDev = think.env === 'development';
 
@@ -107,5 +109,19 @@ module.exports = {
       return action.apply(this, arguments);
     };
     return descriptor;
+  },
+
+  /**
+   * 执行系统命令
+   */
+  exec(cmd) {
+    return new Promise((resolve, reject) => {
+      child_process.exec(cmd, (error, stdout, stderr) => {
+        if (error) {
+          return reject(new Error(error.message));
+        }
+        return resolve(stdout);
+      });
+    });
   },
 };

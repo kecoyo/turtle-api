@@ -2,8 +2,8 @@
 module.exports = {
   workers: 1,
 
-  // imgUrl: 'http://127.0.0.1:8360/',
-  imgUrl: '//cdn.kecoyo.com/',
+  // imgUrl
+  imgUrl: 'https://cdn.kecoyo.com/',
 
   // ...
   jwt: {
