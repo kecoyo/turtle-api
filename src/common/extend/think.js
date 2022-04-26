@@ -23,13 +23,6 @@ module.exports = {
   },
 
   /**
-   * 是否路径存在
-   */
-  exists(file) {
-    return fs.existsSync(file);
-  },
-
-  /**
    * 复制文件
    */
   copyFile(src, dest) {
@@ -94,7 +87,7 @@ module.exports = {
   },
 
   /**
-   * 检查用户授权，装饰器
+   * 检查用户授权，装饰器
    * @param {*} target
    * @param {*} name
    * @param {*} descriptor
