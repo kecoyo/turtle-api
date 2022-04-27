@@ -18,9 +18,9 @@ module.exports = class extends think.Controller {
 
     if (this.isPost && headers['x-gitee-token'] === 'kecoyo' && headers['x-gitee-event'] === 'Push Hook') {
       try {
-        var cmd = 'git pull';
+        const cmd = 'git pull';
         const result = await think.exec(cmd);
-        think.logger.info('exec command: ' + cmd + '\n\n' + result);
+        think.logger.info(`exec command: ${cmd}\n\n${result}`);
         return this.success(result);
       } catch (e) {
         think.logger.error(e);
@@ -30,6 +30,6 @@ module.exports = class extends think.Controller {
 
     think.logger.warn('请求失败！');
     think.logger.warn(JSON.stringify(headers));
-    // return this.fail('请求失败！', headers);
+    return this.fail('请求失败！', headers);
   }
 };

@@ -1,5 +1,5 @@
-const Base = require('./base.js');
 const fs = require('fs');
+const Base = require('./base.js');
 
 module.exports = class extends Base {
   async indexAction() {

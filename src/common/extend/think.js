@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const child_process = require('child_process');
 const md5 = require('md5');
+
 const isDev = think.env === 'development';
 
 module.exports = {
@@ -86,30 +87,30 @@ module.exports = {
     return newFilePath;
   },
 
-  /**
-   * 检查用户授权，装饰器
-   * @param {*} target
-   * @param {*} name
-   * @param {*} descriptor
-   */
-  checkAuth(target, name, descriptor) {
-    const action = descriptor.value;
-    descriptor.value = function () {
-      const { user } = this.ctx.state;
-      if (!user) {
-        return this.ctx.throw('JWT 验证失败', 401);
-      }
-      return action.apply(this, arguments);
-    };
-    return descriptor;
-  },
+  // /**
+  //  * 检查用户授权，装饰器
+  //  * @param {*} target
+  //  * @param {*} name
+  //  * @param {*} descriptor
+  //  */
+  // checkAuth(target, name, descriptor) {
+  //   const action = descriptor.value;
+  //   descriptor.value = function () {
+  //     const { user } = this.ctx.state;
+  //     if (!user) {
+  //       return this.ctx.throw('JWT 验证失败', 401);
+  //     }
+  //     return action.apply(this, arguments);
+  //   };
+  //   return descriptor;
+  // },
 
   /**
    * 执行系统命令
    */
   exec(cmd) {
     return new Promise((resolve, reject) => {
-      child_process.exec(cmd, (error, stdout, stderr) => {
+      child_process.exec(cmd, (error, stdout) => {
         if (error) {
           return reject(new Error(error.message));
         }

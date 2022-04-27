@@ -41,7 +41,7 @@ module.exports = class extends think.Controller {
       .select();
 
     iconList.forEach((icon) => {
-      let iconType = iconTypeMap[icon.type_id];
+      const iconType = iconTypeMap[icon.type_id];
       if (iconType) {
         (iconType.icons || (iconType.icons = [])).push(icon.url);
       }
