@@ -1,6 +1,6 @@
-const jeselvmo = require('jeselvmo');
-const { readSync, ReadDirOptions } = require('readdir');
+const { readSync } = require('readdir');
 const fs = require('fs-extra');
+const { webp2jpg } = require('../utils/image-utils');
 
 const BASE_PATH = '../openlanguage/';
 
@@ -15,7 +15,7 @@ module.exports = class extends think.Controller {
   }
 
   octal2ChineseAction() {
-    const files = readSync(BASE_PATH, ['src/**.txt']);
+    const files = readSync(BASE_PATH, ['src/A1.中/**.txt']);
 
     let content = '';
 
@@ -45,4 +45,16 @@ module.exports = class extends think.Controller {
     }
     return str;
   }
+
+  // webp2jpgAction() {
+  // const result = webp2jpg(`${BASE_PATH}/src/A0/01.webp`, `${BASE_PATH}/src/A0/01.jpg`);
+  // console.log('🚀 ~ extends ~ webp2jpgAction ~ result', result);
+  // this.body = 'success';
+  // }
+
+
+  base64ToStringAction () {
+    this.body = base64ToString
+  }
+
 };
