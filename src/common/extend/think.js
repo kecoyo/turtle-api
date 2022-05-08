@@ -1,8 +1,10 @@
+/* eslint-disable new-cap */
 /* eslint-disable camelcase */
 const path = require('path');
 const fs = require('fs');
 const child_process = require('child_process');
 const md5 = require('md5');
+const webp = require('webp-converter');
 
 const isDev = think.env === 'development';
 
@@ -117,5 +119,29 @@ module.exports = {
         return resolve(stdout);
       });
     });
+  },
+
+  /**
+   * string转为base64
+   */
+  stringToBase64(str) {
+    return new Buffer.from(str).toString('base64');
+  },
+
+  /**
+   * base64转字符串
+   */
+  base64ToString(str) {
+    return new Buffer.from(str, 'base64').toString();
+  },
+
+  /**
+   * webp转jpg
+   * @param {*} src
+   * @param {*} dest
+   * @returns
+   */
+  webp2jpg(src, dest) {
+    return webp.dwebp(src, dest, '-o');
   },
 };
