@@ -14,7 +14,7 @@ module.exports = class extends think.Controller {
   }
 
   octal2ChineseAction() {
-    const files = readSync(BASE_PATH, ['src/A1.中/**.txt']);
+    const files = readSync(BASE_PATH, ['src/B1.中/**.txt']);
 
     let content = '';
 
@@ -24,7 +24,6 @@ module.exports = class extends think.Controller {
 
       content = fs.readFileSync(BASE_PATH + file, 'utf-8');
       content = this.octal2Chinese(content);
-      content = this.repairJson(content);
 
       break;
     }
@@ -47,26 +46,6 @@ module.exports = class extends think.Controller {
       str = decodeURIComponent(str);
     }
     return str;
-  }
-
-  /**
-   * 修复JSON
-   * @param {*} str
-   */
-  repairJson(str) {
-    const lines = str.split('\n');
-    if (lines && lines.length > 0) {
-      for (let i = 0; i < lines.length; i++) {
-        if (lines[i].endsWith('{')) {
-          lines[i] = lines[i].replace(' {', ': {');
-        } else if (lines[i] === '') {
-          lines[i] += '}';
-        } else {
-          lines[i] += ',';
-        }
-      }
-    }
-    return lines.join('\n');
   }
 
   webp2jpgAction() {
