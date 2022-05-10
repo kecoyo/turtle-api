@@ -3,6 +3,10 @@
     "node": true
   },
   "extends": ["airbnb-base", "prettier"],
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "requireConfigFile": false
+  },
   "globals": {
     "think": true
   },
@@ -15,6 +19,7 @@
     "no-return-assign": 0,
     "no-unused-vars": 1,
     "no-underscore-dangle": 0,
-    "prefer-const": 0
+    "no-unreachable-loop": 0
+    "prefer-const": 0,
   }
 }
