@@ -21,11 +21,11 @@ module.exports = class extends think.Service {
       let newFile = file.replace('.txt', '.txt2');
       let exist = fs.existsSync(BASE_PATH + newFile);
 
-      // if (!exist) {
-      let content = fs.readFileSync(BASE_PATH + file, 'utf-8');
-      content = this.octal2ChineseFile(content, file);
-      fs.writeFileSync(BASE_PATH + newFile, content);
-      // }
+      if (!exist) {
+        let content = fs.readFileSync(BASE_PATH + file, 'utf-8');
+        content = this.octal2ChineseFile(content, file);
+        fs.writeFileSync(BASE_PATH + newFile, content);
+      }
     }
   }
 
