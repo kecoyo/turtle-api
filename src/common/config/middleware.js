@@ -1,5 +1,6 @@
 const path = require('path');
 const jwt = require('koa-jwt');
+
 const isDev = think.env === 'development';
 const cors = require('@koa/cors');
 
@@ -34,10 +35,8 @@ module.exports = [
   {
     handle: jwt,
     options: {
-      secret: think.config('jwt')['secret'],
-      getToken: (ctx, opts) => {
-        return ctx.header.authorization;
-      },
+      secret: think.config('jwt').secret,
+      getToken: (ctx, opts) => ctx.header.authorization,
       passthrough: true,
       debug: isDev,
     },

@@ -3,20 +3,20 @@ const qiniu = require('qiniu');
 module.exports = class extends think.Service {
   constructor() {
     super();
-    var accessKey = 'R6qzlwVu3gfWY05dmxZKtTshgr5RWTjPbymx0-Lk';
-    var secretKey = 'nxAedGNYipoqrVS4lI_1ofyZbr3N12b8re-_Duha';
-    var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
-    var bucket = 'zaifumo';
-    var config = new qiniu.conf.Config();
+    const accessKey = 'R6qzlwVu3gfWY05dmxZKtTshgr5RWTjPbymx0-Lk';
+    const secretKey = 'nxAedGNYipoqrVS4lI_1ofyZbr3N12b8re-_Duha';
+    const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
+    const bucket = 'zaifumo';
+    const config = new qiniu.conf.Config();
     config.zone = qiniu.zone.Zone_z1; // 空间对应的机房
-    var bucketManager = new qiniu.rs.BucketManager(mac, config);
+    const bucketManager = new qiniu.rs.BucketManager(mac, config);
 
     // 自定义凭证有效期（示例2小时，expires单位为秒，为上传凭证的有效时间）
-    var putPolicy = new qiniu.rs.PutPolicy({
+    const putPolicy = new qiniu.rs.PutPolicy({
       scope: bucket,
     });
-    var uploadToken = putPolicy.uploadToken(mac);
-    var formUploader = new qiniu.form_up.FormUploader(config);
+    const uploadToken = putPolicy.uploadToken(mac);
+    const formUploader = new qiniu.form_up.FormUploader(config);
 
     this.bucket = bucket;
     this.bucketManager = bucketManager;
@@ -26,9 +26,10 @@ module.exports = class extends think.Service {
 
   promiseify(fn) {
     return function() {
-      let args = Array.prototype.slice.call(arguments);
+      // eslint-disable-next-line prefer-rest-params
+      const args = Array.prototype.slice.call(arguments);
       return new Promise((resolve, reject) => {
-        fn(...args, function(err, respBody, respInfo) {
+        fn(...args, (err, respBody, respInfo) => {
           if (err) {
             reject(err);
             return;
@@ -73,7 +74,7 @@ module.exports = class extends think.Service {
   }
 
   putFile(key, file) {
-    var putExtra = new qiniu.form_up.PutExtra();
+    const putExtra = new qiniu.form_up.PutExtra();
     const putFile = this.formUploader.putFile.bind(this.formUploader);
     return this.promiseify(putFile)(this.uploadToken, key, file, putExtra);
   }

@@ -12,13 +12,13 @@ module.exports = class extends think.Service {
     const result = await new Promise((resolve, reject) => {
       const jscode2session = 'https://api.weixin.qq.com/sns/jscode2session';
       const url = `${jscode2session}?appid=${appid}&secret=${secret}&js_code=${code}&grant_type=${grantType}`;
-      var req = http.get(url, function(res) {
+      const req = http.get(url, (res) => {
         res.setEncoding('utf8');
-        res.on('data', function(chunk) {
+        res.on('data', (chunk) => {
           resolve(JSON.parse(chunk));
         });
       });
-      req.on('error', function(e) {
+      req.on('error', (e) => {
         reject(e.message);
       });
       req.end();

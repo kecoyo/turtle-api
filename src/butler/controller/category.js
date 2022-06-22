@@ -74,7 +74,7 @@ module.exports = class extends think.Controller {
     if (think.isEmpty(category)) {
       return this.fail('object not found');
     }
-    this.success(category);
+    return this.success(category);
   }
 
   /**
