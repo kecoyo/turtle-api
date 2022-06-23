@@ -21,7 +21,7 @@ module.exports = class extends think.Controller {
     let senderLogin = _.get(body, 'sender.login', '');
     let repositoryName = _.get(body, 'repository.name', '');
 
-    if (this.isPost && hookEvents.includes('push') && senderLogin === 'kecoyo') {
+    if (this.isPost && senderLogin === 'kecoyo') {
       // turtle-api
       if (repositoryName === 'turtle-api') {
         try {
