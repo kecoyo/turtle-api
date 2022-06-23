@@ -32,4 +32,9 @@ module.exports = class extends think.Controller {
       'aHR0cHM6Ly92My5vcGVubGFuZ3VhZ2UuY29tLzgwMmM1YTQ1ZjZkYmQ2NGU1NzFlYTljYzI4ODg1YzQyLzYyNmEzYTMyL3ZpZGVvL3Rvcy9jbi90b3MtY24tdmUtODEvYjQ5ZDgwYmExYzBjNDM1MmFhZWY2NGU3YmE4ZDAzNTEvP2NkPTAlN0MwJTdDMCU3QzAmYnI9MTMzJmJ0PTEzMyZjcz0wJmZ0PWUtMUFZMjJIamFsOU15Qk15cXNRMS1DNXFTWU1zS1RFRHRHcHU0ODZ5cTgmbWltZV90eXBlPWF1ZGlvX21wNCZxcz02JnJjPWFUdGxPMmxtWjJrME4yazhaems3T0VCcE0zUXpkblZ0ZUdWdmR6TXpOVFF6TTBBMFlEVXhZUzh2Tmk4eE5sOWhZR0JlWVNOeVlXRnBjVzVqWm1oZkxTMHpNaTl6Y3clM0QlM0QmbD0yMDIyMDQyODEzNTQ0MTAxMDEzODE2ODE5NDBBRDc1MzU4';
     this.body = think.base64ToString(base64);
   }
+
+  toJsonAction() {
+    this.dataService.toJsonAll();
+    return this.success(true);
+  }
 };
