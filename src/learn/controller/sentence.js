@@ -7,30 +7,33 @@ module.exports = class extends Base {
     return 'OK';
   }
 
-  // async insertAction() {
-  //   const content = fs.readFileSync(path.resolve(think.APP_PATH, 'learn/controller/data.txt'), 'utf-8');
-  //   const lines = content.split('\n');
-  //   const model = this.model('sentence'); // controller 里实例化模型
-  //   const insertIds = [];
+  async insertAction() {
+    const content = fs.readFileSync(path.resolve(think.APP_PATH, 'learn/controller/data.txt'), 'utf-8');
+    const lines = content.split('\n');
 
-  //   for (let i = 0; i < lines.length; i++) {
-  //     let line = lines[i];
-  //     line = line.split('|');
+    let list = [];
+    for (let i = 0; i < lines.length; i++) {
+      let line = lines[i];
+      line = line.split('|');
 
-  //     if (line[0]) {
-  //       let insertId = await model.add(
-  //         {
-  //           name_en: line[0],
-  //           name_zh: line[1],
-  //         },
-  //         {
-  //           replace: true,
-  //         }
-  //       );
-  //       insertIds.push(insertId);
-  //     }
-  //   }
+      if (line[0]) {
+        let item = {
+          name_en: line[0],
+          name_zh: line[1],
+        };
+        list.push(item);
+      }
+    }
 
-  //   return this.success(insertIds);
-  // }
+    let model = this.model('sentence');
+    let insertIds = await model.addSentenceList(list);
+
+    return this.success(insertIds);
+  }
+
+  async listAction() {
+    let model = this.model('sentence');
+    let list = await model.page(1, 20).countSelect();
+    return this.success(list);
+  }
 };
