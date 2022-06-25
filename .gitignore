@@ -1,5 +1,4 @@
 .idea
-.vscode
 logs/
 node_modules/
 runtime/

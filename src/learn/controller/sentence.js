@@ -33,7 +33,7 @@ module.exports = class extends Base {
 
   async listAction() {
     let model = this.model('sentence');
-    let list = await model.page(1, 200).countSelect();
+    let list = await model.page(1, 20).countSelect();
     return this.success(list);
   }
 };

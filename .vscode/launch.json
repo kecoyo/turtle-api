@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [{
+    "type": "node",
+    "restart": true,
+    "request": "launch",
+    "name": "ThinkJS Debug",
+    "cwd": "${workspaceRoot}",
+    "runtimeExecutable": "node",
+    "autoAttachChildProcesses": true,
+    "runtimeArgs": ["--inspect", "development.js"]
+  }]
+}
