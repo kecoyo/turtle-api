@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const { pinyin, Pinyin } = require('pinyin');
-const nodejieba = require('nodejieba');
 const _ = require('lodash');
 const Base = require('./base.js');
 

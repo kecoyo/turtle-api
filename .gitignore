@@ -12,3 +12,5 @@ package-lock.json
 404.html
 
 temp/
+
+src/common/config/adapter.development.*
