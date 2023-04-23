@@ -1,12 +1,7 @@
-const Base = require('./base.js');
+const Base = require('./base');
 
 module.exports = class extends Base {
   indexAction() {
     return this.display();
-  }
-
-  listFilesAction() {
-    const files = think.getdirFiles('./src');
-    return this.success(files);
   }
 };

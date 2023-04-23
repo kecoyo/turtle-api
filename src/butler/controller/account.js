@@ -1,54 +1,25 @@
 const _ = require('lodash');
+const Base = require('./base');
 
 /**
  * 账号
  */
-module.exports = class extends think.Controller {
+module.exports = class extends Base {
   /**
-   * 获得当前Modeal对象
-   */
-  getModel() {
-    return this.model('account');
-  }
-
-  /**
-   * @api {get} /butler/account/list   1.获取账号列表
+   * @api {get} /butler/account/list 获取账号列表
    * @apiGroup 账号
    *
    * @apiParam {Number} categoryId  账号分类ID
    *
    * @apiSuccess {Object[]} data  账号列表
-   *
-   * @apiSuccessExample {json} Success-Response:
-   *     HTTP/1.1 200 OK
-   *     [
-   *       {
-   *         "id": 3668,  // 账号ID
-   *         "category_id": 1017,  // 账号分类ID
-   *         "name": "个人征信",  // 账号名称
-   *         "icon": "//cdn.kecoyo.com/upload/butler_icon/ae/5884ca328c3e5c7eb3df7e4c55525a.png", // 账号图标URL
-   *         "properties": [],  // 属性
-   *         "pictures": [],    // 照片
-   *         "remark": "",  // 备注
-   *         "sort": 1, // 排序号
-   *         "create_at": "2021-01-25 00:03:35",  // 创建时间
-   *         "status": 1, // 激活状态
-   *         "is_deleted": 0, // 是否删除
-   *         "subtitle": "kecoyo",  // 第一个属性值
-   *       },
-   *       ...
-   *     ]
    */
   async listAction() {
     const { categoryId } = this.get();
 
-    const accounts = await this.model('account')
-      .where({ is_deleted: 0, status: 1, category_id: categoryId })
-      .order('sort asc')
-      .select();
+    const accounts = await this.model('account').where({ is_deleted: 0, status: 1, category_id: categoryId }).order('sort asc').select();
 
     // 解析属性和照片
-    accounts.forEach((account) => {
+    accounts.forEach(account => {
       this.parseAccount(account);
 
       // 第一属性值作为子标题
@@ -63,28 +34,12 @@ module.exports = class extends think.Controller {
   }
 
   /**
-   * @api {get} /butler/account/detail   2.获取账号详情
+   * @api {get} /butler/account/detail 获取账号详情
    * @apiGroup 账号
    *
    * @apiParam {Number} id 账号ID
    *
    * @apiSuccess {Object} data  账号对象
-   *
-   * @apiSuccessExample {json} Success-Response:
-   *     HTTP/1.1 200 OK
-   *     {
-   *       "id": 3668,  // 账号ID
-   *       "category_id": 1017,  // 账号分类ID
-   *       "name": "个人征信",  // 账号名称
-   *       "icon": "//cdn.kecoyo.com/upload/butler_icon/ae/5884ca328c3e5c7eb3df7e4c55525a.png", // 账号图标URL
-   *       "properties": [],  // 属性
-   *       "pictures": [],    // 照片
-   *       "remark": "",  // 备注
-   *       "sort": 1, // 排序号
-   *       "create_at": "2021-01-25 00:03:35",  // 创建时间
-   *       "status": 1, // 激活状态
-   *       "is_deleted": 0, // 是否删除
-   *     }
    */
   async detailAction() {
     const { id } = this.get();
@@ -101,7 +56,7 @@ module.exports = class extends think.Controller {
   }
 
   /**
-   * @api {get} /butler/account/add   3.添加账号
+   * @api {get} /butler/account/add 添加账号
    * @apiGroup 账号
    *
    * @apiParam {Number} category_id     所属分类ID
@@ -123,7 +78,7 @@ module.exports = class extends think.Controller {
   }
 
   /**
-   * @api {get} /butler/account/update   4.修改账号
+   * @api {get} /butler/account/update 修改账号
    * @apiGroup 账号
    *
    * @apiParam {Number} id              账号ID
@@ -147,7 +102,7 @@ module.exports = class extends think.Controller {
   }
 
   /**
-   * @api {post} /butler/account/saveList  5.保存列表
+   * @api {post} /butler/account/saveList 保存列表
    * @apiGroup 账号
    *
    * @apiParam {Number} categoryId    当前分类ID
@@ -175,16 +130,16 @@ module.exports = class extends think.Controller {
   }
 
   /**
-   * @api {post} /butler/account/uploadPicture  6.上传图片
-   * @apiGroup 账号
+   * @api {post} /butler/account/uploadPicture 上传图片
+   * @apiGroup Account
    *
    * @apiParam {File} file 要上传图片
    *
    * @apiSuccess {Boolean} data  图片URL
    */
   async uploadPictureAction() {
+    const { file } = this.file();
     try {
-      const { file } = this.file();
       const filePath = await think.uploadFile(file, 'account_picture');
       this.success(this.config('imgUrl') + filePath);
     } catch (error) {
@@ -194,12 +149,12 @@ module.exports = class extends think.Controller {
 
   stringifyAccount(account) {
     account.properties = JSON.stringify(account.properties || []);
-    account.pictures = (account.pictures || []).map((pic) => pic.url).join('|');
+    account.pictures = (account.pictures || []).map(pic => pic.url).join('|');
   }
 
   parseAccount(account) {
     account.properties = JSON.parse(account.properties || '[]');
     account.pictures = account.pictures ? account.pictures.split('|') : [];
-    account.pictures = account.pictures.map((url) => ({ url, upload: true }));
+    account.pictures = account.pictures.map(url => ({ url, upload: true }));
   }
 };

@@ -19,6 +19,7 @@
     "koa-jwt": "^4.0.3",
     "lodash": "^4.17.21",
     "md5": "^2.3.0",
+    "mime-types": "^2.1.35",
     "qiniu": "^7.5.0",
     "readdir": "^1.0.2",
     "think-cache": "^1.1.2",
@@ -41,9 +42,11 @@
     "eslint": "^8.14.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-ljlx": "^1.0.2",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-think": "^1.0.3",
     "nyc": "^15.1.0",
+    "prettier-config-ljlx": "^1.0.0",
     "think-babel": "^2.0.1",
     "think-inspect": "0.0.2",
     "think-watcher": "^3.0.4",
@@ -68,6 +71,7 @@
     "clone": false,
     "isMultiModule": true
   },
+  "prettier": "prettier-config-ljlx",
   "apidoc": {
     "title": "apiDoc - turtle-api",
     "description": "A basic apiDoc example",

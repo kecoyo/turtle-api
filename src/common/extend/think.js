@@ -1,12 +1,9 @@
 /* eslint-disable new-cap */
 /* eslint-disable camelcase */
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const child_process = require('child_process');
 const md5 = require('md5');
-const webp = require('webp-converter');
-
-const isDev = think.env === 'development';
 
 module.exports = {
   /**
@@ -26,27 +23,25 @@ module.exports = {
   },
 
   /**
-   * 复制文件
+   * 复制文件或目录
    */
-  copyFile(src, dest) {
-    this.mkdir(path.dirname(dest));
-    fs.copyFileSync(src, dest);
+  copyFile(src, dest, options) {
+    fs.copySync(src, dest, options);
   },
 
   /**
-   * 移动文件
+   * 移动文件或目录
    */
-  moveFile(src, dest) {
-    this.mkdir(path.dirname(dest));
-    fs.renameSync(src, dest);
+  moveFile(src, dest, options) {
+    fs.moveSync(src, dest, options);
   },
 
   /**
-   * 删除文件
+   * 删除文件或目录
    */
-  deleteFile(file) {
+  removeFile(file) {
     // 删除文件
-    fs.unlinkSync(file);
+    fs.removeSync(file);
   },
 
   /**
@@ -66,7 +61,7 @@ module.exports = {
   },
 
   /**
-   * 上传文件
+   * 上传文件到upload目录，及上传到七牛对象存储服务器
    * @param {*} file
    * @param {*} typeDir
    */
@@ -75,37 +70,22 @@ module.exports = {
     const extName = path.extname(fileName).toLowerCase();
 
     const content = fs.readFileSync(file.path);
-    const newFileName = think.md5(content) + extName;
+    const newFileName = this.md5(content) + extName;
     const newFilePath = path.join('upload', typeDir, newFileName.substr(0, 2), newFileName.substr(2));
     const newFile = path.join(think.WWW_PATH, newFilePath);
 
-    this.moveFile(file.path, newFile);
+    this.moveFile(file.path, newFile, {
+      overwrite: true,
+    });
 
-    // 只有是生产环境才上传qiniu服务器上
-    // if (!isDev) {
-    await think.service('qiniu').putFile(newFilePath, newFile);
-    // }
+    const key = newFilePath.replace(/\\/g, '/');
 
-    return newFilePath;
+    if (this.config('isUploadQiniu')) {
+      await think.service('qiniu').putFile(key, newFile);
+    }
+
+    return key;
   },
-
-  // /**
-  //  * 检查用户授权，装饰器
-  //  * @param {*} target
-  //  * @param {*} name
-  //  * @param {*} descriptor
-  //  */
-  // checkAuth(target, name, descriptor) {
-  //   const action = descriptor.value;
-  //   descriptor.value = function () {
-  //     const { user } = this.ctx.state;
-  //     if (!user) {
-  //       return this.ctx.throw('JWT 验证失败', 401);
-  //     }
-  //     return action.apply(this, arguments);
-  //   };
-  //   return descriptor;
-  // },
 
   /**
    * 执行系统命令
@@ -133,15 +113,5 @@ module.exports = {
    */
   base64ToString(str) {
     return new Buffer.from(str, 'base64').toString();
-  },
-
-  /**
-   * webp转jpg
-   * @param {*} src
-   * @param {*} dest
-   * @returns
-   */
-  webp2jpg(src, dest) {
-    return webp.dwebp(src, dest, '-o');
   },
 };

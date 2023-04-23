@@ -1,8 +1,8 @@
 const path = require('path');
 const jwt = require('koa-jwt');
+const cors = require('@koa/cors');
 
 const isDev = think.env === 'development';
-const cors = require('@koa/cors');
 
 module.exports = [
   {
@@ -21,8 +21,7 @@ module.exports = [
     enable: isDev,
     options: {
       root: path.join(think.ROOT_PATH, 'www'),
-      // publicPath: /^\/(static|favicon\.ico)/,
-      notFoundNext: true,
+      publicPath: /^\/(static|favicon\.ico)/,
     },
   },
   {

@@ -13,4 +13,7 @@ package-lock.json
 
 temp/
 
-src/common/config/adapter.development.*
+config.development.js
+config.production.js
+adapter.development.js
+adapter.production.js

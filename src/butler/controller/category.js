@@ -1,72 +1,43 @@
 const _ = require('lodash');
+const Base = require('./base');
 
 /**
  * 账号分类
  */
-module.exports = class extends think.Controller {
+module.exports = class extends Base {
   /**
-   * @api {get} /butler/category/list   1.获取分类列表
+   * @api {get} /butler/category/list 获取分类列表
    * @apiGroup 账号分类
    *
    * @apiSuccess {Object[]} data  分类列表
-   *
-   * @apiSuccessExample {json} Success-Response:
-   *     HTTP/1.1 200 OK
-   *     [
-   *       {
-   *         "id": 1017,  // 分类ID
-   *         "name": "网站登录",  // 分类名称
-   *         "icon": "//cdn.kecoyo.com/upload/butler_icon/ae/5884ca328c3e5c7eb3df7e4c55525a.png", // 分类图标URL
-   *         "remark": "",  // 备注
-   *         "sort": 1, // 排序号
-   *         "create_at": "2021-01-25 00:03:35",  // 创建时间
-   *         "status": 1, // 激活状态
-   *         "is_deleted": 0, // 是否删除
-   *         "count": 20,  // 分类下账号数
-   *       },
-   *       ...
-   *     ]
    */
   async listAction() {
+    // 分类列表
     const categorys = await this.model('category').where({ is_deleted: 0, status: 1 }).order('sort asc').select();
 
-    // 分组统计count
+    // 统计每个分类下账号数量
     const groupList = await this.model('account')
       .where({ is_deleted: 0, status: 1 })
       .group('category_id')
       .field('category_id, count(*) as count')
       .select();
 
-    // keyBy
-    const countMap = _.keyBy(groupList, 'category_id');
-
+    // 将账号数量加入分类列表中
+    const groupMap = _.keyBy(groupList, 'category_id');
     categorys.forEach((item) => {
-      item.count = countMap[item.id] ? countMap[item.id].count : 0;
+      item.count = groupMap[item.id] ? groupMap[item.id].count : 0;
     });
 
     this.success(categorys);
   }
 
   /**
-   * @api {get} /butler/category/detail   2.获取分类详情
+   * @api {get} /butler/category/detail 获取分类详情
    * @apiGroup 账号分类
    *
    * @apiParam {Number} id 分类ID
    *
    * @apiSuccess {Object} data  分类对象
-   *
-   * @apiSuccessExample {json} Success-Response:
-   *     HTTP/1.1 200 OK
-   *     {
-   *       "id": 1017,  // 分类ID
-   *       "name": "网站登录",  // 分类名称
-   *       "icon": "//cdn.kecoyo.com/upload/butler_icon/ae/5884ca328c3e5c7eb3df7e4c55525a.png", // 分类图标URL
-   *       "remark": "",  // 备注
-   *       "sort": 1, // 排序号
-   *       "create_at": "2021-01-25 00:03:35",  // 创建时间
-   *       "status": 1, // 激活状态
-   *       "is_deleted": 0, // 是否删除
-   *     }
    */
   async detailAction() {
     const { id } = this.get();
@@ -78,12 +49,11 @@ module.exports = class extends think.Controller {
   }
 
   /**
-   * @api {post} /butler/category/add 3.添加账号分类
+   * @api {post} /butler/category/add 添加账号分类
    * @apiGroup 账号分类
    *
    * @apiParam {String} name  分类名称
    * @apiParam {String} icon  图标URL
-   * @apiParam {Number} sort  排序号
    *
    * @apiSuccess {Number} data  新插入分类的ID
    *
@@ -91,14 +61,18 @@ module.exports = class extends think.Controller {
   async addAction() {
     const { name, icon } = this.post();
 
-    // 获取新排序号
-    const list = await this.model('category').where({ is_deleted: 0, status: 1 }).order('sort asc').select();
-    const sort = list.length + 1;
+    try {
+      // 获取新排序号
+      const count = await this.model('category').where({ is_deleted: 0, status: 1 }).count();
+      const sort = count + 1;
 
-    // 插入
-    const insertId = await this.model('category').add({ name, icon, sort });
+      // 插入
+      const insertId = await this.model('category').add({ name, icon, sort });
 
-    return this.success(insertId);
+      return this.success(insertId);
+    } catch (err) {
+      return this.fail(err.message);
+    }
   }
 
   /**
@@ -115,12 +89,34 @@ module.exports = class extends think.Controller {
    */
   async updateAction() {
     const { id, name, icon, sort } = this.post();
-    const affectedRows = await this.model('category').update({ id, name, icon, sort });
-    return this.success(affectedRows);
+    try {
+      const affectedRows = await this.model('category').update({ id, name, icon, sort });
+      return this.success(affectedRows);
+    } catch (err) {
+      return this.fail(err.message);
+    }
   }
 
   /**
-   * @api {post} /butler/category/saveList  5.保存账号分类列表
+   * @api {post} /butler/category/delete 删除账号分类
+   * @apiGroup 账号分类
+   *
+   * @apiParam {Number} id 分类ID
+   *
+   * @apiSuccess {Boolean} data 操作成功
+   */
+  async deleteAction() {
+    const { id } = this.post();
+    try {
+      const affectedRows = await this.model('category').where({ id: id }).update({ is_deleted: 1 });
+      return this.success(affectedRows);
+    } catch (err) {
+      return this.fail(err.message);
+    }
+  }
+
+  /**
+   * @api {post} /butler/category/saveList 保存账号分类列表
    * @apiGroup 账号分类
    *
    * @apiParam {Number[]} ids    分类ID
@@ -128,9 +124,9 @@ module.exports = class extends think.Controller {
    * @apiSuccess {Boolean} data  操作成功
    */
   async saveListAction() {
-    try {
-      const { ids } = this.post();
+    const { ids } = this.post();
 
+    try {
       // 更新列表排序
       const list = ids.map((id, i) => ({ id, sort: i + 1 }));
       await this.model('category').updateMany(list);

@@ -3,10 +3,8 @@ const qiniu = require('qiniu');
 module.exports = class extends think.Service {
   constructor() {
     super();
-    const accessKey = 'R6qzlwVu3gfWY05dmxZKtTshgr5RWTjPbymx0-Lk';
-    const secretKey = 'nxAedGNYipoqrVS4lI_1ofyZbr3N12b8re-_Duha';
+    const { accessKey, secretKey, bucket } = think.config('qiniu');
     const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
-    const bucket = 'zaifumo';
     const config = new qiniu.conf.Config();
     config.zone = qiniu.zone.Zone_z1; // 空间对应的机房
     const bucketManager = new qiniu.rs.BucketManager(mac, config);
@@ -25,7 +23,8 @@ module.exports = class extends think.Service {
   }
 
   promiseify(fn) {
-    return function() {
+    // eslint-disable-next-line space-before-function-paren
+    return function () {
       // eslint-disable-next-line prefer-rest-params
       const args = Array.prototype.slice.call(arguments);
       return new Promise((resolve, reject) => {
@@ -73,6 +72,12 @@ module.exports = class extends think.Service {
     return this.promiseify(batch)(statOperations);
   }
 
+  /**
+   * 上传文件
+   * @param {*} key
+   * @param {*} file
+   * @returns
+   */
   putFile(key, file) {
     const putExtra = new qiniu.form_up.PutExtra();
     const putFile = this.formUploader.putFile.bind(this.formUploader);

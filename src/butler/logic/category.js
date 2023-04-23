@@ -1,4 +1,8 @@
 module.exports = class extends think.Logic {
+  listAction() {
+    this.rules = {};
+  }
+
   detailAction() {
     this.rules = {
       id: { method: 'GET', required: true, int: true },
@@ -23,7 +27,7 @@ module.exports = class extends think.Logic {
 
   deleteAction() {
     this.rules = {
-      id: { method: 'GET', required: true, int: true },
+      id: { method: 'POST', required: true, int: true },
     };
   }
 };

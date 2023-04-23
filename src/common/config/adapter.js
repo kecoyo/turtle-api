@@ -40,7 +40,7 @@ exports.model = {
     database: 'turtle-admin',
     prefix: '',
     encoding: 'utf8mb4',
-    host: '127.0.0.1',
+    host: isDev ? '127.0.0.1' : 'mysql',
     port: '3306',
     user: 'root',
     password: '123456',
